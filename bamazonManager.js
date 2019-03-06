@@ -37,16 +37,21 @@ function viewLowInventory(lowVal) {
     });
 };
 
-function addInventory () {
-    console.log("addInventory");
-    getActivity();
+function addInventory (productID, numUnits) {
+    strSQL = "update products set stock_quantity = stock_quantity + " + numUnits + " where item_id = " + productID;
+    console.log (strSQL);
+    conn.query(strSQL, function (err, data){
+        if (err) throw err;
+        console.log(`\n${numUnits} units were added to item_id ${productID}`);
+        getActivity();
+    });
 };
 
 function newProduct (name, department, price) {
     var numericPrice = parseFloat(price);
     strSQL = `insert into products (product_name, department_name, price, stock_quantity) `;
     strSQL = strSQL + `values ('${name}', '${department}', ${numericPrice}, 0)`;
-    console.log (strSQL);
+    // console.log (strSQL);
     conn.query(strSQL, function (err, data) {
         if (err) throw err;
         console.log(`\nThe new product ${name} was added to the ${department} department with a price of $${numericPrice}.`);
@@ -84,28 +89,51 @@ function getActivity () {
                 });
                 break;
             case 'Add to inventory':
-                addInventory();
-                break;
-            case 'Add new product':
                 inquirer.prompt([
                     {
                         type: "input",
-                        name: "productName",
-                        message: "Enter the name of the new product:"
-                    },
-                    {
-                        type: "list",
-                        name: "departmentName",
-                        message: "Select the department for this product:",
-                        choices: ['Sporting Goods', 'Garden', 'Home', 'Hardware', 'Clothing']
+                        name: "productID",
+                        message: "Enter the item_id for the product for which the items will be added:"
                     },
                     {
                         type: "input",
-                        name: "price",
-                        message: "Enter the price for this product:"
+                        name: "numUnits",
+                        message: "Enter the number of units to be added to the stock quantity for this product:"
                     }
-                ]).then(function (moreResults) {
-                    newProduct(moreResults.productName, moreResults.departmentName, moreResults.price);
+                ]).then (function (moreResults) {
+                    addInventory(moreResults.productID, moreResults.numUnits);
+                });
+                break;
+            case 'Add new product':
+                var departmentArr = [];
+                strSQL = "select distinct department_name from departments order by department_name";
+                conn.query(strSQL, function (err,data) {
+                    if (err) throw err;
+                    debugger;
+                    for (var j=0; j < data.length; j++) {
+                        departmentArr.push(data[j].department_name);
+                    };
+                    console.log ("departments = " + departmentArr);
+                    inquirer.prompt([
+                        {
+                            type: "input",
+                            name: "productName",
+                            message: "Enter the name of the new product:"
+                        },
+                        {
+                            type: "list",
+                            name: "departmentName",
+                            message: "Select the department for this product:",
+                            choices: departmentArr
+                        },
+                        {
+                            type: "input",
+                            name: "price",
+                            message: "Enter the price for this product:"
+                        }
+                    ]).then(function (moreResults) {
+                        newProduct(moreResults.productName, moreResults.departmentName, moreResults.price);
+                    })
                 });    
                 break;
             case 'Exit':
