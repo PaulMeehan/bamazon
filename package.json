@@ -1,0 +1,24 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "Bamazon store front",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaulMeehan/bamazon.git"
+  },
+  "author": "Paul Meehan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaulMeehan/bamazon/issues"
+  },
+  "homepage": "https://github.com/PaulMeehan/bamazon#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^6.2.2",
+    "mysql": "^2.16.0"
+  }
+}
