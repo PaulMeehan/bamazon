@@ -13,6 +13,8 @@ create table products (
     primary key (item_id)
 );
 
+alter table products add column product_sales float;
+
 create table departments (
 	department_id integer auto_increment,
     department_name varchar(50) not null,
@@ -39,5 +41,6 @@ values
 ("Sweater","Clothing",45.00,75);
 
 select * from products;
+
 
 

@@ -17,10 +17,10 @@ conn.connect(function (err) {
 
 function processSale (productID, numRequested) {
     var strSQL = "select * from products where item_id=" + productID;
-    console.log (strSQL);
+    // console.log (strSQL);
     conn.query(strSQL, function (err, data) {
         if (err) throw err;
-        console.log(data);
+        // console.log(data);
         console.log(`You requested to purchase ${numRequested} of our ${data[0].product_name}(s)`);
         if (numRequested > data.stock_quantity) {
             console.log ("Sorry, but we do not have enough in stock for that order.  Please try again.");
@@ -28,9 +28,12 @@ function processSale (productID, numRequested) {
         } else {
             console.log ("Your order is being processed.");
             var totalCost = (parseInt(numRequested) * parseFloat(data[0].price));
+            var totalProductSales = parseFloat(data[0].product_sales) + totalCost;
             console.log ("The total cost for this transaction will be $" + totalCost);
             var newStockQuantity = data[0].stock_quantity - numRequested;
-            strSQL = "update products set stock_quantity=" + newStockQuantity + " where item_id=" + productID;
+            strSQL = `update products set stock_quantity=${newStockQuantity}, product_sales=${totalProductSales} where item_id=${productID}`;
+            // console.log (strSQL);
+            debugger;
             conn.query(strSQL, function (updateErr, updateData) {
                 if (updateErr) throw updateErr;
                 makeASale();
@@ -48,13 +51,37 @@ function makeASale() {
     });
 };
 
+function validateChoice(choice) {
+    if (choice.toUpperCase() !=="Q") {
+        var isValid = true;
+        if (isNaN(choice)) {
+            isValid = false;
+        } else if (! Number.isInteger(choice)) {
+            isvalid = false;
+        };
+        return isValid || "ID should be an integer.  Please enter a valid value";
+    } else {
+        return true;
+    };
+};
+
+function validateQuantity(choice) {
+    var isValid = true;
+    if (! Number.isInteger(choice)) {
+        isValid = false;
+    };
+    return isValid;
+    // || "Quantity should be an integer.  Please enter a valid value";
+};
+
 function promptUser () {
 
     inquirer.prompt([
         {
             type: "input",
             name: "choice",
-            message: "Please enter the ID of the product you would like to purchase [enter Q to quit]:"
+            message: "Please enter the ID of the product you would like to purchase [enter Q to quit]:",
+            validate: validateChoice
         },
         {
             type: "input",
@@ -62,7 +89,8 @@ function promptUser () {
             message: "How many of these items would you like to purchase?",
             when: function (answers) {
                 return answers.choice.toUpperCase() !== "Q";
-            }
+            },
+            validate: validateQuantity
         }
     ]).then(function (results) {
         if (results.choice.toUpperCase() !== "Q") {
