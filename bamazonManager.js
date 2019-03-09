@@ -61,7 +61,25 @@ function newProduct (name, department, price) {
 };
 
 
+function validateIsNumber(response) {
+    var numericResponse = Number(response);
+    if (isNaN(numericResponse)) {
+        return false || "Please provide a numeric value";
+    } else {
+        return true;
+    };
+};
 
+function validateIsInteger(response) {
+    var numericResponse = Number(response);
+    if (isNaN(numericResponse)) {
+        return false || "Please provide a numeric value";
+    } else if (!Number.isInteger(numericResponse)) {
+        return false || "Please provide an integer value";
+    } else {
+        return true;
+    };
+};
 
 function getActivity () {
     inquirer.prompt([
@@ -83,6 +101,7 @@ function getActivity () {
                         type: "input",
                         name: "lowValue",
                         message: "What stock quantity is considered 'low'?",
+                        validate: validateIsNumber
                     }
                 ]).then(function (moreResults) {
                     viewLowInventory(moreResults.lowValue);
@@ -93,12 +112,14 @@ function getActivity () {
                     {
                         type: "input",
                         name: "productID",
-                        message: "Enter the item_id for the product for which the items will be added:"
+                        message: "Enter the item_id for the product for which the items will be added:",
+                        validate: validateIsInteger
                     },
                     {
                         type: "input",
                         name: "numUnits",
-                        message: "Enter the number of units to be added to the stock quantity for this product:"
+                        message: "Enter the number of units to be added to the stock quantity for this product:",
+                        validate: validateIsInteger
                     }
                 ]).then (function (moreResults) {
                     addInventory(moreResults.productID, moreResults.numUnits);
@@ -129,7 +150,8 @@ function getActivity () {
                         {
                             type: "input",
                             name: "price",
-                            message: "Enter the price for this product:"
+                            message: "Enter the price for this product:",
+                            validate: validateIsNumber
                         }
                     ]).then(function (moreResults) {
                         newProduct(moreResults.productName, moreResults.departmentName, moreResults.price);

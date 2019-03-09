@@ -1,14 +1,19 @@
+require('dotenv').config();
 const inquirer = require("inquirer");
 const mysql = require('mysql');
 const cTable = require('console.table');
+
+console.log(process.env);
 
 var conn = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "DataRules019283",
+    password: process.DATABASE_PW,
     database: 'bamazon'
 });
+
+
 
 conn.connect(function (err) {
     if (err) throw err;
@@ -18,6 +23,7 @@ conn.connect(function (err) {
 function processSale (productID, numRequested) {
     var strSQL = "select * from products where item_id=" + productID;
     // console.log (strSQL);
+    var validatedNum = Number(numRequested);
     conn.query(strSQL, function (err, data) {
         if (err) throw err;
         // console.log(data);
@@ -54,11 +60,13 @@ function makeASale() {
 function validateChoice(choice) {
     if (choice.toUpperCase() !=="Q") {
         var isValid = true;
-        if (isNaN(choice)) {
+        var numericVal = Number(choice);
+        if (isNaN(numericVal)) {
             isValid = false;
-        } else if (! Number.isInteger(choice)) {
+        } else if (!Number.isInteger(numericVal)) {
             isvalid = false;
         };
+        // if (! isValid) console.log("\nID should be an integer.  Please enter a valid value");
         return isValid || "ID should be an integer.  Please enter a valid value";
     } else {
         return true;
@@ -67,11 +75,12 @@ function validateChoice(choice) {
 
 function validateQuantity(choice) {
     var isValid = true;
-    if (! Number.isInteger(choice)) {
+    var numericVal = Number(choice);
+    if (! Number.isInteger(numericVal)) {
+        // console.log("\nQuantity should be an integer.  Please enter a valid value");
         isValid = false;
     };
-    return isValid;
-    // || "Quantity should be an integer.  Please enter a valid value";
+    return isValid || "Quantity should be an integer.  Please enter a valid value";
 };
 
 function promptUser () {

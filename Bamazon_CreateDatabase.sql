@@ -15,6 +15,9 @@ create table products (
 
 alter table products add column product_sales float;
 
+update products set product_sales = 0.0;
+
+
 create table departments (
 	department_id integer auto_increment,
     department_name varchar(50) not null,
@@ -40,7 +43,13 @@ values
 ("Pants","Clothing",49.00,100),
 ("Sweater","Clothing",45.00,75);
 
-select * from products;
+insert into departments (department_name, overhead_costs)
+values
+("Sporting Goods", 10000),
+("Garden", 10000),
+("Home", 10000),
+("Hardware", 10000),
+("Clothing", 10000)
 
 
 

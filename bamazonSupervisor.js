@@ -40,6 +40,26 @@ function createDepartment(newDeptName, newOHCosts) {
     });
 };
 
+function validateIsNumber(response) {
+    var numericResponse = Number(response);
+    if (isNaN(numericResponse)) {
+        return false || "Please provide a numeric value";
+    } else {
+        return true;
+    };
+};
+
+function validateIsInteger(response) {
+    var numericResponse = Number(response);
+    if (isNaN(numericResponse)) {
+        return false || "Please provide a numeric value";
+    } else if (!Number.isInteger(numericResponse)) {
+        return false || "Please provide an integer value";
+    } else {
+        return true;
+    };
+};
+
 function userInput () {
     inquirer.prompt ([
         {
@@ -63,7 +83,8 @@ function userInput () {
                     {
                         type: "input",
                         name: "ohCosts",
-                        message: "What are the overhead costs for this new department?"
+                        message: "What are the overhead costs for this new department?",
+                        validate: validateIsNumber
                     }
                 ]).then(function(moreData) {
                     createDepartment(moreData.deptName, moreData.ohCosts);
