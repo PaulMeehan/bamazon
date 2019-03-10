@@ -8,7 +8,7 @@
 This application is a Command Line Interface utility that imitates an online store providing an interface for customers to make purchases, 
 a separate interface for managers to maintain their inventory, and another interface for supervisors to monitor their productivity.
 
-A video describing how the application works can be viewed by [clicking this link](https://www.google.com).
+A video describing how the application works can be viewed by [clicking this link](https://drive.google.com/file/d/18BxsPxgmc0E-_4jbLX63bj4QRw2ZDhQH/view).
 
 **User instructions:**
 

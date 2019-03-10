@@ -22,7 +22,7 @@ var conn = mysql.createConnection({
 // Connect to the database.
 conn.connect(function (err) {
     if (err) throw err;
-    console.log(`Connected as id: ${conn.threadId}`);
+    // console.log(`Connected as id: ${conn.threadId}`);
 });
 
 

@@ -19,7 +19,7 @@ var conn = mysql.createConnection({
 // Connect to the database.
 conn.connect(function (err) {
     if (err) throw err;
-    console.log(`Connected as id: ${conn.threadId}`);
+    // console.log(`Connected as id: ${conn.threadId}`);
 });
 
 function processSale (productID, numRequested) {
@@ -36,7 +36,8 @@ function processSale (productID, numRequested) {
         // Provide feedback to the user.
         console.log(`You requested to purchase ${numberRequested} of our ${data[0].product_name}(s)`);
         // Provide error message and stop processing if number requested is more than number in stock.
-        if (numberRequested > data.stock_quantity) {
+        debugger;
+        if (numberRequested > data[0].stock_quantity) {
             console.log ("Sorry, but we do not have enough in stock for that order.  Please try again.");
             // Start next transaction.
             showProducts();

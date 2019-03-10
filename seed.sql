@@ -18,10 +18,10 @@ values
 
 insert into departments (department_name, overhead_costs)
 values
-("Sporting Goods", 10000),
-("Garden", 10000),
-("Home", 10000),
-("Hardware", 10000),
-("Clothing", 10000);
+("Sporting Goods", 2000),
+("Garden", 2000),
+("Home", 2000),
+("Hardware", 2000),
+("Clothing", 2000);
 
 

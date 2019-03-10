@@ -7,7 +7,7 @@ var strSQL = "";
 
 var conn = mysql.createConnection({
     host: "localhost",
-    port: 3306,
+    port: process.env.PORT,
     user: "root",
     password: process.env.DATABASE_PW,
     database: "bamazon"
@@ -15,7 +15,7 @@ var conn = mysql.createConnection({
 
 conn.connect(function (err) {
     if (err) throw err;
-    console.log (`Connected as id: ${conn.threadId}`);
+    // console.log (`Connected as id: ${conn.threadId}`);
 });
 
 
@@ -23,7 +23,7 @@ function viewProductSales () {
     strSQL = "select d.department_id, d.department_name, overhead_costs, sum(product_sales) as product_sales, (sum(product_sales) - overhead_costs) as total_profit ";
     strSQL = strSQL + "from departments d left join products p on d.department_name = p.department_name ";
     strSQL = strSQL + "group by d.department_id, d.department_name ";
-    console.log(strSQL);
+    // console.log(strSQL);
     conn.query(strSQL, function(err, data) {
         if (err) throw err;
         console.table("\nTotal Product Sales by Department:\n", data);
@@ -33,7 +33,7 @@ function viewProductSales () {
 
 function createDepartment(newDeptName, newOHCosts) {
     strSQL = `insert into departments (department_name, overhead_costs) values ('${newDeptName}', ${newOHCosts})`;
-    console.log(strSQL);
+    // console.log(strSQL);
     conn.query(strSQL, function(err, newData) {
         if (err) throw err;
         console.log (`\nThe new department '${newDeptName}' has been created with an overhead cost of ${newOHCosts}`);
